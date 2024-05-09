@@ -102,9 +102,12 @@ tolerations: []
 affinity: {}
 
 healthCheck:
-  enabled: true
-  path: "/lanchonete-produto/api/v1/actuator/health/readiness"
-  port: 8080
+  readinessProbe:
+    path: "/lanchonete-produto/api/v1/actuator/health/readiness"
+    port: 8080
+  livenessProbe:
+    path: "/lanchonete-produto/api/v1/actuator/health/liveness"
+    port: 8080
 
 env:
   - name: DATABASE_URL
