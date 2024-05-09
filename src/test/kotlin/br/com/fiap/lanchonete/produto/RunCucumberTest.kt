@@ -1,15 +1,14 @@
 package br.com.fiap.lanchonete.produto
 
-import io.cucumber.junit.Cucumber
-import io.cucumber.junit.CucumberOptions
-import org.junit.runner.RunWith
+import io.cucumber.core.options.Constants
+import org.junit.platform.suite.api.ConfigurationParameter
+import org.junit.platform.suite.api.IncludeEngines
+import org.junit.platform.suite.api.Suite
 
-
-@RunWith(Cucumber::class)
-@CucumberOptions(
-    plugin = ["pretty"],
-    features = ["src/test/resources/features"],
-    glue = ["br.com.fiap.lanchonete.produto.infrastructure.web.controller"]
-)
+@Suite
+@IncludeEngines("cucumber")
+@ConfigurationParameter(key = Constants.FEATURES_PROPERTY_NAME, value = "src/test/resources/features/produto.feature")
+@ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME,value = "br.com.fiap.lanchonete.produto.integration")
+@ConfigurationParameter(key = Constants.PLUGIN_PROPERTY_NAME,value = "pretty, html:target/cucumber-report/cucumber.html")
 class RunCucumberTest  {
 }

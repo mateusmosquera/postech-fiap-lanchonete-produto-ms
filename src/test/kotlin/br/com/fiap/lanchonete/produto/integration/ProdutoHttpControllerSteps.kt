@@ -1,4 +1,4 @@
-package br.com.fiap.lanchonete.produto.infrastructure.web.controller
+package br.com.fiap.lanchonete.produto.integration
 
 import br.com.fiap.lanchonete.produto.application.dto.request.ImagemRequest
 import br.com.fiap.lanchonete.produto.application.dto.request.ProdutoRequest
@@ -27,7 +27,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
 
     private lateinit var imagem:List<String>
 
-    @Given("^que o cliente envia uma solicitação para criar um novo produto com nome ([^\"]*), descricao ([^\"]*) e preco (\\d+)")
+    @Given("^que o cliente envia uma solicitacao para criar um novo produto com nome ([^\"]*), descricao ([^\"]*) e preco (\\d+)")
     fun givenQueOClienteEnviaUmaSolicitacaoParaCriarUmNovoProdutoComOsDados(nome: String, descricao:String, preco:Double) {
 
         produtoRequest = ProdutoRequest(nome = nome, categoria = CategoriaEnum.LANCHE, descricao = descricao, preco = BigDecimal.valueOf(preco))
@@ -40,7 +40,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
 
     }
 
-    @When("^cliente recebe a solicitação com código de status (\\d+)")
+    @When("^cliente recebe a solicitacao com codigo de status (\\d+)")
     fun whenClienteRecebeASolicitacaoComCodigoDeStatus(status: Int) {
         assertEquals(produtoResponse.statusCode.value(), status)
     }
@@ -53,7 +53,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
         }
     }
 
-    @Given("^que o cliente envia uma solicitação para recuperar informações de um produto pelo ID (\\d+)$")
+    @Given("^que o cliente envia uma solicitacao para recuperar informacoes de um produto pelo ID (\\d+)$")
     fun givenQueOClienteEnviaUmaSolicitacaoParaRecuperarInformacoesDeUmProdutoPeloId(id: Long) {
         try {
             produtoResponse = produtoCucumberClient.getProduto(id)
@@ -62,7 +62,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
         }
     }
 
-    @Then("^recebe as informações corretas do produto na resposta$")
+    @Then("^recebe as informacoes corretas do produto na resposta$")
     fun thenRecebeAsInformacoesCorretasDoProdutoNaResposta() {
 
         if(produtoResponse.statusCode.value() == 200) {
@@ -71,7 +71,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
         }
     }
 
-    @Given("^que o cliente envia uma solicitação para editar informações de um produto pelo ID (\\d+) com os dados novos")
+    @Given("^que o cliente envia uma solicitacao para editar informacoes de um produto pelo ID (\\d+) com os dados novos")
     fun givenQueOClienteEnviaUmaSolicitacaoParaEditarInformacoesDeUmProdutoPeloIdComOsNovosDados(id: Long) {
         produtoResponse = produtoCucumberClient.editProduto(id, ProdutoRequest(nome = "nome atualizado", categoria = CategoriaEnum.LANCHE, descricao = "descricao atualizada", preco = BigDecimal.valueOf(20)))
     }
@@ -84,7 +84,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
         }
     }
 
-    @Given("^que o cliente envia uma solicitação para deletar um produto pelo ID (\\d+)$")
+    @Given("^que o cliente envia uma solicitacao para deletar um produto pelo ID (\\d+)$")
     fun givenQueOClienteEnviaUmaSolicitacaoParaDeletarUmProdutoPeloId(id: Long) {
         try {
             unitResponse = produtoCucumberClient.delete(id)
@@ -93,18 +93,18 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
         }
     }
 
-    @When("^cliente recebe apenas o código de status (\\d+)")
+    @When("^cliente recebe apenas o codigo de status (\\d+)")
     fun whenClienteRecebeApenasCodigoStatus(id:Int) {
 
         assertEquals(HttpStatus.valueOf(id), unitResponse.statusCode)
     }
 
-    @Then("^o produto é removido com sucesso e o cliente recebe uma resposta vazia$")
+    @Then("^o produto e removido com sucesso e o cliente recebe uma resposta vazia$")
     fun thenOProdutoERemovidoComSucessoEOClienteRecebeUmaRespostaVazia() {
         assertNull(unitResponse.body)
     }
 
-    @Given("^que o cliente envia uma solicitação para recuperar produtos por categoria (.*)$")
+    @Given("^que o cliente envia uma solicitacao para recuperar produtos por categoria (.*)$")
     fun givenQueOClienteEnviaUmaSolicitacaoParaRecuperarProdutosPorCategoria(categoria: String) {
         pageCategoriaResponse = produtoCucumberClient.getByCategoria(CategoriaEnum.valueOf(categoria), Pageable.ofSize(10))
     }
@@ -121,7 +121,7 @@ class ProdutoHttpControllerSteps(var produtoCucumberClient: ProdutoCucumberClien
     }
 
 
-    @Given("^que o cliente envia uma solicitação para alterar a imagem de um produto pelo ID (\\d+) com a nova imagem (.*)")
+    @Given("^que o cliente envia uma solicitacao para alterar a imagem de um produto pelo ID (\\d+) com a nova imagem (.*)")
     fun givenQueOClienteEnviaUmaSolicitacaoParaAlterarAImagemDeUmProdutoPeloIdComANovaImagem(id: Long, novaImagem: String) {
         imagem = listOf(novaImagem)
 

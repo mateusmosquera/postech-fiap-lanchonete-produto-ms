@@ -65,12 +65,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=lanchonete-fiap -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=lanchonete-fiap_lanchonete-fiap-sonar-cloud -Dsonar.token=$SONAR_TOKEN
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.organization=lanchonete-fiap -Dsonar.host.url=https://sonarcloud.io -Dsonar.projectKey=lanchonete-fiap_lanchonete-produto -Dsonar.token=$SONAR_TOKEN
       - name: Check Quality Gate
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          QUALITY_GATE_STATUS=$(curl -s "https://sonarcloud.io/api/qualitygates/project_status?projectKey=lanchonete-fiap_lanchonete-fiap-sonar-cloud" -H "Authorization: Basic $SONAR_TOKEN" | jq -r '.projectStatus.status')
+          QUALITY_GATE_STATUS=$(curl -s "https://sonarcloud.io/api/qualitygates/project_status?projectKey=lanchonete-fiap_lanchonete-produto" -H "Authorization: Basic $SONAR_TOKEN" | jq -r '.projectStatus.status')
           if [ "$QUALITY_GATE_STATUS" = "OK" ]; then
             echo "QG OK"
           fi
@@ -101,20 +101,20 @@ jobs:
         run: aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_HOST }}
 
       - name: Build Docker Image
-        run: docker build -t lanchonete .
+        run: docker build -t lanchonete-produto .
 
       - name: Get Helm Chart version
         run: |
-          version=$(helm show chart ./manifest/lanchonete/ | grep "^version:" | awk '{print $2}')
+          version=$(helm show chart ./manifest/lanchonete-produto/ | grep "^version:" | awk '{print $2}')
           echo "Helm Chart version: $version"
           echo "VERSION=$version" >> $GITHUB_ENV
 
       - name: Create tag repository
         run:
-          docker tag lanchonete:latest "${{ secrets.ECR_HOST }}/lanchonete:${{ env.VERSION }}"
+          docker tag lanchonete-produto:latest "${{ secrets.ECR_HOST }}/lanchonete-produto:${{ env.VERSION }}"
 
       - name: Push Docker Image
-        run: docker push ${{ secrets.ECR_HOST }}/lanchonete:${{ env.VERSION }}
+        run: docker push ${{ secrets.ECR_HOST }}/lanchonete-produto:${{ env.VERSION }}
 
   deploy-Prod:
     runs-on: ubuntu-latest
@@ -129,7 +129,7 @@ jobs:
 
       - name: Get Helm Chart version
         run: |
-          version=$(helm show chart ./manifest/lanchonete/ | grep "^version:" | awk '{print $2}')
+          version=$(helm show chart ./manifest/lanchonete-produto/ | grep "^version:" | awk '{print $2}')
           echo "Helm Chart version: $version"
           echo "VERSION=$version" >> $GITHUB_ENV    
 
@@ -146,8 +146,8 @@ jobs:
       - name: Deploy to EKS using Helm
         run: |
           helm upgrade --install \
-            lanchonete \
-            manifest/lanchonete \
+            lanchonete-produto \
+            manifest/lanchonete-produto \
             --namespace default \
-            --set image.repository=${{ secrets.ECR_HOST }}/lanchonete \
+            --set image.repository=${{ secrets.ECR_HOST }}/lanchonete-produto \
             --set image.tag=${{ env.VERSION }}
