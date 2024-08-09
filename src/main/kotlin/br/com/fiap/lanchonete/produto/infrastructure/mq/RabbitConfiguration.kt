@@ -12,8 +12,7 @@ import kotlin.io.path.Path
 class RabbitConfiguration(@Value("\${app.mq.port}") private val port: Int,
                           @Value("\${app.mq.cozinha.username}") private val username: String,
                           @Value("\${app.mq.cozinha.password}") private val password: String,
-                          @Value("\${app.mq.cozinha.brokerURL}") private val host: String,
-                          @Value("\${app.mq.cozinha.queueName}") private val queueName: String) {
+                          @Value("\${app.mq.cozinha.brokerURL}") private val host: String) {
 
 
 
