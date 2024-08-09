@@ -118,7 +118,7 @@ env:
   - name: COZINHA_MQ_PASSWORD
     value: "/etc/credentials/secret-password-broker-mq-queue/password"
   - name: COZINHA_MQ_HOST
-    value: "b-f3cb747e-0f01-440e-b725-5639b5917326.mq.us-east-1.amazonaws.com"
+    value: "b-f8647fca-e3cb-4d90-898e-88582c451b14.mq.us-east-1.amazonaws.com"
   - name: COZINHA_MQ_QUEUE_NAME
     value: "pedido-to-cozinha-mq"
   - name: MQ_PORT
