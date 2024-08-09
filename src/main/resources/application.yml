@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/lanchonete-produto}
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/lanchonete}
     username: username
     password: password
     driver-class-name: org.postgresql.Driver
@@ -26,3 +26,13 @@ server:
     context-path: /lanchonete-produto/api/v1
   port: 8080
   host: http://localhost
+
+app:
+  mq:
+    port: ${MQ_PORT:5672}
+    ssl: ${MQ_SSL:false}
+    cozinha:
+      username: ${COZINHA_MQ_USERNAME:guest}
+      password: ${COZINHA_MQ_PASSWORD:src/main/resources/credentials/secret-password-broker-mq-queue}
+      brokerURL: ${COZINHA_MQ_HOST:localhost}
+      queueName: ${COZINHA_MQ_QUEUE_NAME:pedido-to-cozinha-mq}
